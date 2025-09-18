@@ -12,8 +12,10 @@ export const createUrl = async (req: Request, res: Response) => {
       return res.status(400).json({ errors: original.error });
     }
 
+    const originalUrl = original.data.original;
+
     const normalized = (() => {
-      const u = new URL(original);
+      const u = new URL(originalUrl);
       u.hostname =u.hostname.toLowerCase();
       if (u.pathname.endsWith('/') && u.pathname !="/"){
         u.pathname = u.pathname.slice(0,-1);
