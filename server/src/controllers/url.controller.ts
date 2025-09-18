@@ -2,32 +2,46 @@ import { Request, Response } from "express";
 import prisma from "../prisma/client";
 import { nanoid } from "nanoid";
 import redis from "../utils/redis";
+import { URL } from "url";
+import { createUrlSchema } from "../validation/urlSchema";
 
 export const createUrl = async (req: Request, res: Response) => {
   try {
-    const { original } = req.body;
-    const cachedCode = await redis.get(`long:${original}`);
+    const original = createUrlSchema.safeParse(req.body);
+    if (!original.success) {
+      return res.status(400).json({ errors: original.error });
+    }
 
-    if(cachedCode) return res.json({original, shortCode: cachedCode});
+    const normalized = (() => {
+      const u = new URL(original);
+      u.hostname =u.hostname.toLowerCase();
+      if (u.pathname.endsWith('/') && u.pathname !="/"){
+        u.pathname = u.pathname.slice(0,-1);
+      } 
+      return u.toString();
+    })();
 
-    if (!original)
-      return res.status(400).json({ message: "Original url required" });
+    const cachedCode = await redis.get(`long:${normalized}`);
+
+    if (cachedCode) return res.json({ normalized, shortCode: cachedCode });
 
     const code = nanoid(7);
     let url;
 
     try {
-      url = await prisma.url.create({data: {original, shortCode: code}});
-    } catch (e:any) {
-      if(e.code === 'P2002'){
-        url = await prisma.url.findUnique({where: {original}});
+      url = await prisma.url.create({
+        data: { original: normalized, shortCode: code },
+      });
+    } catch (e: any) {
+      if (e.code === "P2002") {
+        url = await prisma.url.findUnique({ where: { original: normalized } });
       } else throw e;
     }
-    if(!url) return res.status(404).json({message: "URL not found"});
+    if (!url) return res.status(404).json({ message: "URL not found" });
 
     //cache both ways, if original is there return shortcode
     await redis.set(url.shortCode, url.original, "EX", 60 * 60);
-    await redis.set(`long:${url.original}`, url.shortCode, "EX", 60*60);
+    await redis.set(`long:${url.original}`, url.shortCode, "EX", 60 * 60);
 
     res.status(201).json(url);
   } catch (error) {
