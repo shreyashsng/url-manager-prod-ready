@@ -26,7 +26,7 @@ const UrlForm = () => {
 
             {shortUrl && (
                 <div className='mt-4'>
-                    <p className='font-semibold'>Your short URL: </p>
+                    <p className='font-semibold text-white'>Your short URL: </p>
                     <a href={shortUrl} target='_blank' className='text-blue-700 underline'>{shortUrl}</a>
                 </div>
             )} 
