@@ -5,7 +5,11 @@ import redis from "../utils/redis";
 import { URL } from "url";
 import { createUrlSchema } from "../validation/urlSchema";
 
-export const createUrl = async (req: Request, res: Response) => {
+export interface AuthRequest extends Request {
+  user?: any;
+}
+
+export const createUrl = async (req: AuthRequest, res: Response) => {
   try {
     const original = createUrlSchema.safeParse(req.body);
     if (!original.success) {
@@ -32,7 +36,7 @@ export const createUrl = async (req: Request, res: Response) => {
 
     try {
       url = await prisma.url.create({
-        data: { original: normalized, shortCode: code },
+        data: { original: normalized, shortCode: code, userId: req.user.id },
       });
     } catch (e: any) {
       if (e.code === "P2002") {

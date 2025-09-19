@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  urls Url[]
+  createdAt DateTime @default(now())
+}
+
 model Url {
   id String @id @default(cuid())
   original String @unique
@@ -14,6 +21,8 @@ model Url {
   clicks Int @default(0)
   createdAt DateTime @default(now())
   events ClickEvent[]
+  userId String
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ClickEvent {
