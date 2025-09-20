@@ -8,8 +8,9 @@ const UrlForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const token = localStorage.getItem("token");
             const res = await axios.post(
-                `${import.meta.env.VITE_API_URL}/urls`, {original}
+                `${import.meta.env.VITE_API_URL}/urls`, {original}, {headers: {Authorization: `Bearer ${token}`}}
             );
             setShortUrl(`${import.meta.env.VITE_API_URL}/urls/${res.data.shortCode}`);
         } catch (error) {
