@@ -11,6 +11,9 @@ export interface AuthRequest extends Request {
 
 export const createUrl = async (req: AuthRequest, res: Response) => {
   try {
+    console.log('createUrl - User object:', req.user);
+    console.log('createUrl - User ID:', req.user?.id);
+    
     const original = createUrlSchema.safeParse(req.body);
     if (!original.success) {
       return res.status(400).json({ errors: original.error });
@@ -35,12 +38,24 @@ export const createUrl = async (req: AuthRequest, res: Response) => {
     let url;
 
     try {
+      console.log('createUrl - Creating URL with userId:', req.user.id);
       url = await prisma.url.create({
         data: { original: normalized, shortCode: code, userId: req.user.id },
       });
+      console.log('createUrl - Created URL:', url);
     } catch (e: any) {
+      console.log('createUrl - Database error:', e);
       if (e.code === "P2002") {
-        url = await prisma.url.findUnique({ where: { original: normalized } });
+        url = await prisma.url.findUnique({ 
+          where: { original: normalized }
+        });
+
+        if (url && url.userId !== req.user.id) {
+          const newCode = nanoid(7);
+          url = await prisma.url.create({
+            data: { original: normalized, shortCode: newCode, userId: req.user.id },
+          });
+        }
       } else throw e;
     }
     if (!url) return res.status(404).json({ message: "URL not found" });
@@ -155,3 +170,25 @@ export const getAnalytics = async (req: Request, res: Response) => {
     res.status(500).json({ error: "server error", details: error });
   }
 };
+
+export const getUserUrls = async(req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    
+    const urls = await prisma.url.findMany({
+      where: {userId},
+      orderBy: {createdAt: 'desc'},
+    });
+
+    const stats = {
+      totalLinks: urls.length,
+      totalClicks: urls.reduce((sum, url) => sum+ url.clicks, 0),
+      activeLinks: urls.length, //implement this later
+    };
+
+    res.json({stats, urls});
+  } catch (error) {
+    console.error('getUserUrls error:', error);
+    res.status(500).json({message: 'Server error'});
+  }
+}

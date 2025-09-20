@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import UrlForm from "../components/UrlForm";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 
 const Home = () => {
   const [user, setUser] = useState(null);
@@ -41,17 +41,24 @@ const Home = () => {
           <Link to="/register" className="mr-4">
             Register
           </Link>
+          <Link to="/dashboard" className="mr-4">
+            Dashboard
+          </Link>
         </div>
 
         {user ? (
-            <div className="flex items-center space-x-4">
-                <span className="text-gray-700">{user.email}</span>
-                <button onClick={handleLogout} className="bg-red-500 text-white px-3 py-1 rounded">Logout</button>
-            </div>
+          <div className="flex items-center space-x-4">
+            <span className="text-gray-700">{user.email}</span>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-3 py-1 rounded"
+            >
+              Logout
+            </button>
+          </div>
         ) : (
-            <span className="text-gray-500 text-sm">Not Logged in</span>
+          <span className="text-gray-500 text-sm">Not Logged in</span>
         )}
-
       </nav>
       <header className="py-16 text-center">
         <h1 className="text-5xl font-extrabold tracking-tight text-gray-900">
