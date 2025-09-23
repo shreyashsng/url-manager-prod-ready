@@ -20,7 +20,7 @@ const UrlForm = () => {
         { original },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setShortUrl(`${import.meta.env.VITE_API_URL}/urls/${res.data.shortCode}`);
+      setShortUrl(`${window.location.origin}/${res.data.shortCode}`);
     } catch (error) {
       console.error(error);
     }
