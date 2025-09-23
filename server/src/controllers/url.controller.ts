@@ -19,7 +19,7 @@ export const createUrl = async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ errors: original.error });
     }
 
-    const originalUrl = original.data.original;
+    const originalUrl = original.data.original.trim();
 
     const normalized = (() => {
       const u = new URL(originalUrl);

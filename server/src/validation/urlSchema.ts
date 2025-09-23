@@ -1,7 +1,7 @@
 import {z} from 'zod';
 
 export const createUrlSchema = z.object({
-    original: z.string().refine((val) => {
+    original: z.string().max(2048, {message: "URL too long"}).refine((val) => {
         try {
             const parsed = new URL(val);
             return parsed.protocol === 'https:' || parsed.protocol === 'http:';

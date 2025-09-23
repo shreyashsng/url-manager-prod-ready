@@ -21,15 +21,17 @@ const Login = ({onLogin}) => {
     };
 
     return (
-        <div>
-            <div>
-                <h2 className='text-2xl font-bold mb-4 text-center'>Login</h2>
-                <form onSubmit={handleSubmit}>
-                    <input type='email' placeholder='Enter email' value={email} onChange={(e) => setEmail(e.target.value)}/>
-                    <input type='password' placeholder='Enter password' value={password} onChange={(e) => setPassword(e.target.value)}/>
-                    <button type='submit' className='bg-green-600 text-white'>Login</button>
+        <div className='flex items-center justify-center min-h-screen bg-gray-50'>
+            <div className='w-full max-w-md bg-white rounded-2xl shadow-lg p-8'>
+                <h2 className='text-3xl font-bold mb-6 text-center text-gray-800'>Welcome Back</h2>
+                <form onSubmit={handleSubmit} className='space-y-6'>
+                    <input type='email' placeholder='Enter email' value={email} onChange={(e) => setEmail(e.target.value)} className='w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-green-500 focus:outline-none'/>
+                    <input type='password' placeholder='Enter password' value={password} onChange={(e) => setPassword(e.target.value)} className='w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-green-500 focus:outline-none'/>
+                    <button type='submit' className='w-full bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition duration-200'>Login</button>
                 </form>
-                {error && <p className='text-center'>{error}</p>}
+                {error && <p className='mt-4 text-center text-red-500 font-medium'>{error}</p>}
+
+                <p className='mt-6 text-center text-gray-600 text-sm'>Dont't have an account?{" "}<a href='/register' className='text-green-600 font-semibold hover:underline'>Sign Up</a></p>
             </div>
         </div>
     )
