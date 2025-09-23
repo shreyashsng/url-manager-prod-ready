@@ -72,7 +72,7 @@ const Home = () => {
         <div className="w-full max-w-2xl">
           <div className="bg-white p-6 rounded-2xl">
             <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">
-              Paste your longURL below
+              Paste your long URL below
             </h2>
             <UrlForm />
           </div>
