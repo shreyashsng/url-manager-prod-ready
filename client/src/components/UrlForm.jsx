@@ -22,6 +22,9 @@ const UrlForm = () => {
       );
       setShortUrl(`${window.location.origin}/${res.data.shortCode}`);
     } catch (error) {
+        if(error.response && error.response.status === 429){
+            alert("Too many requests, please try again later.")
+        }
       console.error(error);
     }
   };
@@ -30,26 +33,32 @@ const UrlForm = () => {
     <div className="p-4 max-w-md mx-auto">
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
-          className="border p-2 flex-1 rounded-xl"
+          className="border p-2 flex-1 rounded focus:ring-2 focus:ring-blue-200 focus:outline-none transition duration-200"
           placeholder="Enter your URL"
           value={original}
           onChange={(e) => setOriginal(e.target.value)}
         />
-        <button className="bg-blue-600 hover:bg-blue-700 transition duration-200 text-white px-4 py-2 rounded-xl cursor-pointer">
+        <button className="bg-blue-600 hover:bg-blue-700 transition duration-200 text-white px-4 py-2 rounded cursor-pointer">
           Shorten
         </button>
       </form>
 
       {shortUrl && (
-        <div className="mt-4">
-          <p className="font-semibold text-white">Your short URL: </p>
-          <a
-            href={shortUrl}
-            target="_blank"
-            className="text-blue-700 underline"
-          >
-            {shortUrl}
-          </a>
+        <div className="mt-4 p-4 bg-gray-100 rounded animate-fadeIn">
+          <p className="font-semibold text-gray-800 mb-2">Your short URL: </p>
+          <div className="flex items-center gap-2">
+            <a
+              href={shortUrl}
+              target="_blank"
+              className="text-blue-400 hover:text-blue-300 underline"
+            >
+              {shortUrl}
+            </a>
+            <button type="button" onClick={() => {
+                navigator.clipboard.writeText(shortUrl);
+                alert("Copied to Clipboard!");
+            }} className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg text-sm">Copy</button>
+          </div>
         </div>
       )}
     </div>
