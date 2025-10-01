@@ -192,3 +192,27 @@ export const getUserUrls = async(req: Request, res: Response) => {
     res.status(500).json({message: 'Server error'});
   }
 }
+
+export const deleteUrl = async(req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const {shortCode} = req.params;
+    const url = await prisma.url.findUnique({where: {shortCode}});
+
+    if(!url){
+      return res.status(404).json({message: "URL not found"});
+    }
+
+    if(url.userId!==userId){
+      return res.status(403).json({message: "Forbidden"});
+    }
+
+    await prisma.clickEvent.deleteMany({where: {urlId: url.id}});
+    await prisma.url.delete({where: {shortCode}});
+    await redis.del(shortCode);
+    await redis.del(`long:${url.original}`);
+    return res.json({message:"URL deleted!"});
+  } catch (error) {
+    res.status(500).json({message: "Server error"});
+  }
+}

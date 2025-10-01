@@ -49,6 +49,24 @@ const Dashboard = () => {
     }
   }
 
+  const handleDelete = async(shortCode) => {
+    const token = localStorage.getItem("token");
+
+    if(!window.confirm("Are you sure?")) return;
+
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/urls/${shortCode}`, {headers: {Authorization: `Bearer ${token}`}});
+      setUrls((prev) => prev.filter((u) => u.shortCode !== shortCode));
+
+      setStats((prev) => ({...prev, totalLinks: prev.totalLinks-1, activeLinks: prev.activeLinks-1,}));
+
+      alert("URL deleted");
+    } catch (error) {
+      console.log(error);
+      alert("Failed to delete");
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -127,6 +145,7 @@ const Dashboard = () => {
                   {window.location.origin}/{u.shortCode}
                 </a>
                 <button onClick={() => fetchAnalytics(u.shortCode)} className="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded mt-2 sm:mt-0">Analytics</button>
+                <button onClick={() => handleDelete(u.shortCode)} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded mt-2 sm:mt-0">Delete</button>
               </li>
             ))}
           </ul>
