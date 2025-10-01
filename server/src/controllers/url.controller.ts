@@ -106,7 +106,9 @@ export const getOriginalUrl = async (req: Request, res: Response) => {
     const url = await prisma.url.findUnique({
       where: { shortCode },
     });
-    if (!url) return res.status(404).json({ message: "Url not found" });
+    if (!url){
+      return res.redirect(`${process.env.CORS_ORIGIN_URL}/not-found`);
+    }
 
     prisma.clickEvent
       .create({

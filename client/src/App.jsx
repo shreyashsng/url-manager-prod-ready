@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import RedirectPage from "./pages/RedirectPage"
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
       <Route path="/register" element={<Register />}/>
       <Route path="/dashboard" element={<Dashboard />}/>
       <Route path="/:shortCode" element={<RedirectPage/>}/>
+
+      <Route path="not-found" element={<NotFound />}/>
      </Routes>
     </BrowserRouter>
   )
