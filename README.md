@@ -13,6 +13,13 @@ Includes **authentication, analytics, Redis caching, secure APIs, and a React da
 - 🖥 **Dashboard (React)**: Manage links, view stats, track user activity.
 - 🐳 **Production practices**: Environment-based configs, Prisma migrations, error handling.
 
+### Quick Demo
+Try out the application instantly using these credentials:
+```
+Email: shreyashsingh1441@gmail.com
+Password: pass1234
+```
+
 ## 🛠 Architecture
 ```mermaid
 graph TD
