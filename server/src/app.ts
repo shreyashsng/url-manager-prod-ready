@@ -4,12 +4,11 @@ import dotenv from 'dotenv';
 import urlRoutes from './routes/urls.routes';
 import authRoutes from './routes/auth.routes';
 
-
 dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: process.env.CORS_ORIGIN_URL || 'http://localhost:5173',
+  origin: process.env.CORS_ORIGIN_URL,
   credentials: true, 
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
