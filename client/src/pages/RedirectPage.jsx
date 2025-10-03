@@ -3,10 +3,8 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 const backendRedirectUrl = (shortCode) => {
-    const base = (import.meta.env.VITE_API_URL);
-    if(/\/api(\/)?$/.test(base)){
-        return `${base}/urls/${shortCode}`;
-    }
+    const base = (import.meta.env.VITE_API_URL?.replace(/\/$/, ""));
+    return `${base}/urls/${shortCode}`;
 }
 
 const RedirectPage = () => {
