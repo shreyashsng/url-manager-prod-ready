@@ -8,6 +8,7 @@ import helmet from 'helmet';
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5000',
+  process.env.CORS_ORIGIN_URL,
 ];
 
 dotenv.config();
