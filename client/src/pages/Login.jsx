@@ -27,7 +27,7 @@ const Login = ({onLogin}) => {
                 <form onSubmit={handleSubmit} className='space-y-6'>
                     <input type='email' placeholder='Enter email' value={email} onChange={(e) => setEmail(e.target.value)} className='w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-green-500 focus:outline-none'/>
                     <input type='password' placeholder='Enter password' value={password} onChange={(e) => setPassword(e.target.value)} className='w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-green-500 focus:outline-none'/>
-                    <button type='submit' className='w-full bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition duration-200'>Login</button>
+                    <button type='submit' className='w-full bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition duration-200 py-2 cursor-pointer'>Login</button>
                 </form>
                 {error && <p className='mt-4 text-center text-red-500 font-medium'>{error}</p>}
 
